@@ -73,20 +73,22 @@ path_G = "../../GANCF/models/cifar10_dcgan_1/dc64_ganns_200_G.pth"
 G.load_state_dict(torch.load(path_G))
 G.eval()
 
-image_gan = []
+images_gan = []
 
 z_dim = 100
 batch_size = 200
-for i in range(25):
-    z = Variable(torch.randn(batch_size, z_dim, 1, 1).to(device))
-    img = G(z)
-    if i == 0:
-        images = img
-    else:
-        images = torch.cat((images, img), dim = 0)
-
-images = images.cpu().numpy()
+with torch.no_grad():
+    for i in range(250):
+        z = Variable(torch.randn(batch_size, z_dim, 1, 1).to(device))
+        img = G(z).cpu()
+        if i == 0:
+            images = img
+        else:
+            images = torch.cat((images, img), dim = 0)
+images = images.view(-1,64,64,3)
+images = images.detach().cpu().numpy()
 print(images.shape)
+images=np.round((images+1)*(255/2))
 for x in images:
     images_gan.append(x)
 
