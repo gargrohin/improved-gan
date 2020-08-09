@@ -35,5 +35,8 @@ cifar = dset.CIFAR10(root='../datasets/cifar10_data/', download=True,
 )
 
 images = cifar.data
-
-print(model(images))
+images_list = []
+for x in images:
+    images_list.append(x)
+print("\nCalculating IS...\n")
+print(get_inception_score(images_list))
