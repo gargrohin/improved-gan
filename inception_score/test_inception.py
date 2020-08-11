@@ -69,28 +69,36 @@ z_dim = 100
 ndf = 64
 G = generator().to(device)
 
-path_G = "../../GANCF/models/cifar10_dcgan_1/dc64_ganns_200_G.pth"
-G.load_state_dict(torch.load(path_G))
-G.eval()
+scores = []
 
-images_gan = []
+for gen_ind in range(0,200,10):
+    path_G = "../../GANCF/models/cifar10_dcgan_1/dc64_ganns_" + str(gen_ind) + "_G.pth"
+    G.load_state_dict(torch.load(path_G))
+    G.eval()
 
-z_dim = 100
-batch_size = 200
-with torch.no_grad():
-    for i in range(250):
-        z = Variable(torch.randn(batch_size, z_dim, 1, 1).to(device))
-        img = G(z).cpu()
-        if i == 0:
-            images = img
-        else:
-            images = torch.cat((images, img), dim = 0)
-images = images.view(-1,64,64,3)
-images = images.detach().cpu().numpy()
-print(images.shape)
-images=np.round((images+1)*(255/2))
-for x in images:
-    images_gan.append(x)
+    images_gan = []
+
+    z_dim = 100
+    batch_size = 200
+    with torch.no_grad():
+        for i in range(50):
+            z = Variable(torch.randn(batch_size, z_dim, 1, 1).to(device))
+            img = G(z).cpu()
+            if i == 0:
+                images = img
+            else:
+                images = torch.cat((images, img), dim = 0)
+    images = images.view(-1,64,64,3)
+    images = images.detach().cpu().numpy()
+    print(images.shape)
+    images=np.round((images+1)*(255/2))
+    for x in images:
+        images_gan.append(x)
+    print("\nCalculating IS...\n")
+    scores.append((get_inception_score(images_gan)[0],gen_ind))
+
+print(scores)
+
 
 
 # cifar = dset.CIFAR10(root='../datasets/cifar10_data/', download=True,
@@ -105,5 +113,3 @@ for x in images:
 # images_list = []
 # for x in images:
 #     images_list.append(x)
-print("\nCalculating IS...\n")
-print(get_inception_score(images_gan))
