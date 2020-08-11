@@ -71,7 +71,7 @@ G = generator().to(device)
 
 scores = []
 
-for gen_ind in range(0,200,10):
+for gen_ind in range(10,20,10):
     path_G = "../../GANCF/models/cifar10_dcgan_1/dc64_ganns_" + str(gen_ind) + "_G.pth"
     G.load_state_dict(torch.load(path_G))
     G.eval()
@@ -79,9 +79,9 @@ for gen_ind in range(0,200,10):
     images_gan = []
 
     z_dim = 100
-    batch_size = 200
+    batch_size = 100
     with torch.no_grad():
-        for i in range(50):
+        for i in range(100):
             z = Variable(torch.randn(batch_size, z_dim, 1, 1).to(device))
             img = G(z).cpu()
             if i == 0:
