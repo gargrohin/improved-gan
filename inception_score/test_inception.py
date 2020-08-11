@@ -70,6 +70,7 @@ ndf = 64
 G = generator().to(device)
 
 scores = []
+gen_ind = 200
 
 path_G = "../../GANCF/models/cifar10_dcgan_1/dc64_ganns_" + str(gen_ind) + "_G.pth"
 G.load_state_dict(torch.load(path_G))
@@ -80,7 +81,7 @@ images_gan = []
 z_dim = 100
 batch_size = 100
 with torch.no_grad():
-    for i in range(100):
+    for i in range(250):
         z = Variable(torch.randn(batch_size, z_dim, 1, 1).to(device))
         img = G(z).cpu()
         if i == 0:
@@ -91,6 +92,10 @@ images = images.view(-1,64,64,3)
 images = images.detach().cpu().numpy()
 print(images.shape)
 images=np.round((images+1)*(255/2))
+
+# important!
+torch.cuda.empty_cache()
+
 for x in images:
     images_gan.append(x)
 print("\nCalculating IS...\n")
