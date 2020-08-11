@@ -71,7 +71,7 @@ G = generator().to(device)
 
 scores = []
 
-for gen_ind in range(10,20,10):
+for gen_ind in range(10,201,10):
     path_G = "../../GANCF/models/cifar10_dcgan_1/dc64_ganns_" + str(gen_ind) + "_G.pth"
     G.load_state_dict(torch.load(path_G))
     G.eval()
@@ -81,7 +81,7 @@ for gen_ind in range(10,20,10):
     z_dim = 100
     batch_size = 100
     with torch.no_grad():
-        for i in range(100):
+        for i in range(50):
             z = Variable(torch.randn(batch_size, z_dim, 1, 1).to(device))
             img = G(z).cpu()
             if i == 0:
@@ -92,10 +92,14 @@ for gen_ind in range(10,20,10):
     images = images.detach().cpu().numpy()
     print(images.shape)
     images=np.round((images+1)*(255/2))
+
+    torch.cuda.empty_cache()
+    
     for x in images:
         images_gan.append(x)
     print("\nCalculating IS...\n")
     scores.append((get_inception_score(images_gan)[0],gen_ind))
+    print("\n----------------------------------\n")
 
 print(scores)
 
