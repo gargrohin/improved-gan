@@ -71,8 +71,8 @@ G = generator().to(device)
 
 scores = []
 
-for gen_ind in range(10,201,10):
-    path_G = "../../GANCF/models/cifar10_dcgan_3_lr2/dc64_ganns_" + str(gen_ind) + "_G.pth"
+for gen_ind in range(10,205,10):
+    path_G = "../../GANCF/models/cifar10_multid_4_lr5_2/dc64_ganns_" + str(gen_ind) + "_G.pth"
     G.load_state_dict(torch.load(path_G))
     G.eval()
 
