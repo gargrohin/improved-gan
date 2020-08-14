@@ -1,0 +1,8 @@
+5 .5 ndis = 2:
+shit 5.04
+
+5 .2 ndis=2: 
+shit 5.25
+
+5 .2 ndis = 4
+shit 5.30
