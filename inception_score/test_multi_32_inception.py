@@ -121,7 +121,7 @@ for gen_ind in range(20,81,20):
     batch_size = 100
     with torch.no_grad():
         for i in range(250):
-            z = Variable(torch.randn(batch_size, z_dim, 1, 1).to(device))
+            z = Variable(torch.randn(batch_size, z_dim).to(device))
             img = G(z).cpu()
             if i == 0:
                 images = img
